@@ -11,7 +11,7 @@ CLIENT_SECRET = os.environ["reddit_client_secret"]
 USERNAME      = os.environ["reddit_username"]
 PASSWORD      = os.environ["reddit_password"]
 
-IS_RELEVANT = re.compile(r"\s*\+?/?u/wolfram-alpha-bot\s+")
+IS_RELEVANT = re.compile(r"\s*\+?/?u/wolfram-alpha-bot\s+(.*)$")
 
 def main():
     r = praw.Reddit(
@@ -28,8 +28,14 @@ def main():
     while 1:
         for message in r.inbox.unread():
             try:
-                if re.match(IS_RELEVANT, message.body):
-                    print(message.body)
+                match = re.match(IS_RELEVANT, message.body)
+                if match:
+                    res = wa.query(match.group(1))
+                    if res["@success"]:
+                        print("success")
+                    else:
+                        print("fail")
+
                 message.mark_read()
             except Exception as e:
                 print("An error occured. ({})".format(str(e)))
