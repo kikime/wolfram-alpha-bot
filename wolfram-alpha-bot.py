@@ -37,15 +37,23 @@ def main():
                         message.reply("Wolfram|Alpha does not know how to interpret your input.\n\n^Beep ^blop ^I'm ^a ^bot. ^Message ^SteveCCL ^if ^there's ^anything ^wrong ^with ^me.")
 
                 message.mark_read()
+                time.sleep(1)
+
+            except KeyboardInterrupt:
+                break
+            except praw.errors.APIException as e:
+                print("RATELIMIT reached")
+                print("Sleeping for 30 secs...")
+                time.sleep(30)
+                print("Continuing")
             except Exception as e:
-                if 'RATELIMIT: ' in str(e):
-                    t = int(str(e).split(' ')[10])
-                    print("RATELIMIT exceeded. Sleeping for {} minutes....".format(t))
-                    time.sleep(60)
-                else:
-                    print("An error occured. ({})".format(str(e)))
-                    print("Retrying in a minute.")
-                    time.sleep(60)
+                print("Something happened")
+                print(str(e))
+                print("Sleeping for 30 secs...")
+                time.sleep(30)
+                print("Continuing")
+
+    print("User requested termination")
 
 
 if __name__ == "__main__":
