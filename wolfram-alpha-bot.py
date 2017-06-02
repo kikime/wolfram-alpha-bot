@@ -31,16 +31,21 @@ def main():
                 match = re.match(IS_RELEVANT, message.body)
                 if match:
                     res = wa.query(match.group(1))
-                    if res["@success"]:
-                        print("success")
+                    if res["@success"] == "true":
+                        message.reply(match.group(1) + " = " + next(res.results).text + "\n\n^Beep ^blop ^I'm ^a ^bot. ^Message ^SteveCCL ^if ^there's ^anything ^wrong ^with ^me.")
                     else:
-                        print("fail")
+                        message.reply("Wolfram|Alpha does not know how to interpret your input.\n\n^Beep ^blop ^I'm ^a ^bot. ^Message ^SteveCCL ^if ^there's ^anything ^wrong ^with ^me.")
 
                 message.mark_read()
             except Exception as e:
-                print("An error occured. ({})".format(str(e)))
-                print("Retrying in a minute.")
-                time.sleep(60)
+                if 'RATELIMIT: ' in str(e):
+                    t = int(str(e).split(' ')[10])
+                    print("RATELIMIT exceeded. Sleeping for {} minutes....".format(t))
+                    time.sleep(60 * t)
+                else:
+                    print("An error occured. ({})".format(str(e)))
+                    print("Retrying in a minute.")
+                    time.sleep(60)
 
 
 if __name__ == "__main__":
