@@ -41,7 +41,7 @@ def main():
                 if 'RATELIMIT: ' in str(e):
                     t = int(str(e).split(' ')[10])
                     print("RATELIMIT exceeded. Sleeping for {} minutes....".format(t))
-                    time.sleep(60 * t)
+                    time.sleep(60)
                 else:
                     print("An error occured. ({})".format(str(e)))
                     print("Retrying in a minute.")
