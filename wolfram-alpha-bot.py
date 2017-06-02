@@ -11,7 +11,7 @@ CLIENT_SECRET = os.environ["reddit_client_secret"]
 USERNAME      = os.environ["reddit_username"]
 PASSWORD      = os.environ["reddit_password"]
 
-IS_RELEVANT = re.compile(r"\s*\+?/?u/wolfram-alpha-bot\s+(.*)$")
+IS_RELEVANT = re.compile(r"\s*\+?/?u/wolfram-alpha-bot\s+(.*)$", re.IGNORECASE)
 
 def main():
     r = praw.Reddit(
